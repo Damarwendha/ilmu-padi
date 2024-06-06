@@ -1,0 +1,40 @@
+# Configuration docker-compose
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: ilmu-padi-db
+    environment:
+      POSTGRES_DB: db_ilmu_padi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2wsx1qaz
+    ports:
+      - "5435:5432"
+    volumes:
+      - volume-ilmu-padi:/var/lib/postgresql/data
+    networks:
+      - network-ilmu-padi
+
+  app:
+    build: ./app
+    container_name: ilmu-padi-app
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 2wsx1qaz
+      DB_NAME: db_ilmu_padi
+      # Add other environment variables here if needed
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - network-ilmu-padi
+
+volumes:
+  volume-ilmu-padi:
+
+networks:
+  network-ilmu-padi:
